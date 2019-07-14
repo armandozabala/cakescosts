@@ -1,0 +1,47 @@
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+</style>
+
+
+<body>
+    <form class="form-signin mt-sm-4 animated fadeIn" #formLogin (submit)="onLogin()">
+        <div class="text-center mb-4">
+            <img class="mb-4" src="../../../assets/cake.png" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Costos Cakes </h1>
+
+        </div>
+
+        <div class="form-label-group">
+            <input [(ngModel)]="email" name="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+            <label for="inputEmail">Email address</label>
+        </div>
+
+        <div class="form-label-group">
+            <input [(ngModel)]="pass" name="pass" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <label for="inputPassword">Password</label>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label>
+      <input type="checkbox" value="remember-me"> Remember me
+    </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in <i class="far fa-user"></i>
+
+        </button>
+        <p class="mt-5 mb-3  text-center">&copy; Hecho con ❤️ para 🎂 2019</p>
+    </form>
+</body>

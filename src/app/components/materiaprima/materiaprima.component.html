@@ -1,0 +1,97 @@
+<a class="navbar-brand" style="font-size: 45px;" href="#">
+    <img src="assets/img/butter.png" width="65" height="65" class="d-inline-block align-top" alt=""> Materia Prima
+</a>
+<button class="btn btn-primary btn-md" (click)="abrirModal()" style="margin-top:-15px;"> Crear </button>
+<br>
+
+<br>
+<br>
+<table class="table table-hover">
+    <thead>
+        <tr style="text-align: center">
+            <th scope="col">Codigo</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Costo</th>
+            <th scope="col">Costo x Unidad</th>
+            <th scope="col">Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr style="text-align: center" *ngFor="let materia of materias">
+            <th scope="row">{{ materia.codigo }}</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+            <td>@mdo</td>
+            <td> <button class="btn btn-primary btn-sm"> Modificar </button>
+                <button class="btn btn-danger btn-sm" style="margin-left: 10px;"> Eliminar </button></td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Materia Prima</h5>
+
+
+            </div>
+            <div class="modal-body">
+
+                <form (ngSubmit)="addMateria()" [formGroup]="forma" novalidate="novalidate">
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Descripción:</label>
+                        <input type="text" class="form-control" id="description" name="description" formControlName="description">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Cantidad:</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Costo:</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Unidad:</label>
+
+                            <select name="unidad" id="unidad" class="form-control">
+                              <option value="">Seleccione</option>
+                              <option value="gr">Gr</option>
+                              <option value="gr">Kg</option>
+                              <option value="gr">Oz</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Costo x Unidad:</label>
+                                <input type="text" disabled class="form-control" id="recipient-name">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
