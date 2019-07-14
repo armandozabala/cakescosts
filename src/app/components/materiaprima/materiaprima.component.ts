@@ -34,8 +34,7 @@ export class MateriaprimaComponent  {
   constructor() {
 
     this.forma = new FormGroup({
-       'description' : new FormControl('Material'),
-       'cantidad':  new FormControl('Cantidad'),
+       'description' : new FormControl('Material')
     });
 
   }
