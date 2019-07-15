@@ -25,7 +25,7 @@
             <td>{{ materia.costs }}</td>
             <td>{{ materia.cost_unity}}</td>
             <td> <button class="btn btn-primary btn-sm" (click)="editModal(materia.id)"> Modificar </button>
-                <button class="btn btn-danger btn-sm" (click)="deleteMaterial(materia.id)" style="margin-left: 10px;"> Eliminar </button></td>
+                <button class="btn btn-danger btn-sm" (click)="confirmDelete(materia.id, materia.description)" style="margin-left: 10px;"> Eliminar </button></td>
         </tr>
 
 
@@ -44,7 +44,7 @@
             </div>
             <div class="modal-body">
 
-                <form (ngSubmit)="addMateria()" [formGroup]="forma" novalidate="novalidate">
+                <form (ngSubmit)="addMaterial()" [formGroup]="forma" novalidate="novalidate">
 
 
                     <div class="form-group">
@@ -111,7 +111,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" disabled class="form-control" id="id" formControlName="id">
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Agregar</button>
@@ -203,7 +203,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" class="form-control" id="id" formControlName="id">
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Editar</button>
@@ -216,3 +216,29 @@
     </div>
 </div>
 <!-- END EDIT MODAL MATERIAL-->
+
+<!-- MODAL CONFIRM  MATERIAL -->
+<div class="modal fade" id="confirmMaterialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Borrar Materia Prima</h5>
+
+
+            </div>
+            <div class="modal-body">
+
+                <p>Desea borrar este material: <b>  {{ materialText }} </b>?</p>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" (click)="deleteMaterial(ids)" class="btn btn-primary">Confirmar</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END CONFIRM MODAL MATERIAL-->
