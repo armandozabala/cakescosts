@@ -1,7 +1,7 @@
 <a class="navbar-brand" style="font-size: 45px;" href="#">
     <img src="assets/img/butter.png" width="65" height="65" class="d-inline-block align-top" alt=""> Materia Prima
 </a>
-<button class="btn btn-primary btn-md" (click)="abrirModal()" style="margin-top:-15px;"> Crear </button>
+<button class="btn btn-primary btn-md" (click)="openModal()" style="margin-top:-15px;"> Crear </button>
 <br>
 
 <br>
@@ -19,13 +19,13 @@
     </thead>
     <tbody>
         <tr style="text-align: center" *ngFor="let materia of materias">
-            <th scope="row">{{ materia.codigo }}</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>@mdo</td>
-            <td> <button class="btn btn-primary btn-sm"> Modificar </button>
-                <button class="btn btn-danger btn-sm" style="margin-left: 10px;"> Eliminar </button></td>
+            <th scope="row">{{ materia.code }}</th>
+            <td>{{ materia.description }}</td>
+            <td>{{ materia.quantity }}</td>
+            <td>{{ materia.costs }}</td>
+            <td>{{ materia.cost_unity}}</td>
+            <td> <button class="btn btn-primary btn-sm" (click)="editModal(materia.id)"> Modificar </button>
+                <button class="btn btn-danger btn-sm" (click)="deleteMaterial(materia.id)" style="margin-left: 10px;"> Eliminar </button></td>
         </tr>
 
 
@@ -33,11 +33,12 @@
 </table>
 
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- MODAL ADD MATERIAL -->
+<div class="modal fade" id="addMaterialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Materia Prima</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Materia Prima</h5>
 
 
             </div>
@@ -45,45 +46,72 @@
 
                 <form (ngSubmit)="addMateria()" [formGroup]="forma" novalidate="novalidate">
 
+
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Descripción:</label>
-                        <input type="text" class="form-control" id="description" name="description" formControlName="description">
+                        <input type="text" class="form-control" [ngClass]="{ 'is-invalid': !forma.get('description').valid }" id="description" formControlName="description">
+                        <div *ngIf="forma.controls['description'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('description').valid }">
+                            La descripción del producto es necesaria....
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Cantidad:</label>
-                                <input type="text" class="form-control" id="recipient-name">
+
+                                <input type="text" class="form-control" [ngClass]="{ 'is-invalid': !forma.get('quantity').valid }" id="quantity" formControlName="quantity">
+                                <div *ngIf="forma.controls['quantity'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('quantity').valid }">
+                                    La cantidad es necesaria....
+                                </div>
                             </div>
                         </div>
+
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Costo:</label>
-                                <input type="text" class="form-control" id="recipient-name">
+                            <label for="recipient-name" class="col-form-label">Unidad:</label>
+
+                            <select name="unidad" id="unidad" class="form-control" formControlName="unity" [ngClass]="{ 'is-invalid': !forma.get('unity').valid }">
+                            <option value="">Seleccione</option>
+                            <option value="gr">Gr</option>
+                            <option value="kg">Kg</option>
+                            <option value="oz">Oz</option>
+                          </select>
+                            <div *ngIf="forma.controls['unity'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('unity').valid }">
+                                Seleccione la unidad...
                             </div>
                         </div>
+
+
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="recipient-name" class="col-form-label">Unidad:</label>
-
-                            <select name="unidad" id="unidad" class="form-control">
-                              <option value="">Seleccione</option>
-                              <option value="gr">Gr</option>
-                              <option value="gr">Kg</option>
-                              <option value="gr">Oz</option>
-                            </select>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Costo:</label>
+                                <input type="text" class="form-control" id="costs" formControlName="costs" [ngClass]="{ 'is-invalid': !forma.get('costs').valid }">
+                                <div *ngIf="forma.controls['costs'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('costs').valid }">
+                                    El costo es necesaria....
+                                </div>
+                            </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label">Costo x Unidad:</label>
-                                <input type="text" disabled class="form-control" id="recipient-name">
+                                <label for="recipient-name" class="col-form-label">Codigo:</label>
+                                <input type="text" class="form-control" id="code" formControlName="code" style="text-transform: uppercase">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Costo x Unidad ({{forma.get('unity').value}}):</label>
+                                <input type="text" disabled class="form-control" id="cost_unity" formControlName="cost_unity">
                             </div>
                         </div>
                     </div>
-
-
+                    <input type="hidden" disabled class="form-control" id="id" formControlName="id">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Agregar</button>
@@ -95,3 +123,96 @@
         </div>
     </div>
 </div>
+<!-- END ADD MODAL MATERIAL-->
+
+<!-- MODAL EDIT MATERIAL -->
+<div class="modal fade" id="editMaterialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Materia Prima</h5>
+
+
+            </div>
+            <div class="modal-body">
+
+                <form (ngSubmit)="editMaterial()" [formGroup]="forma" novalidate="novalidate">
+
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Descripción:</label>
+                        <input type="text" class="form-control" [ngClass]="{ 'is-invalid': !forma.get('description').valid }" id="description" formControlName="description">
+                        <div *ngIf="forma.controls['description'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('description').valid }">
+                            La descripción del producto es necesaria....
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Cantidad:</label>
+
+                                <input type="text" class="form-control" [ngClass]="{ 'is-invalid': !forma.get('quantity').valid }" id="quantity" formControlName="quantity">
+                                <div *ngIf="forma.controls['quantity'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('quantity').valid }">
+                                    La cantidad es necesaria....
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Unidad:</label>
+
+                            <select name="unidad" id="unidad" class="form-control" formControlName="unity" [ngClass]="{ 'is-invalid': !forma.get('unity').valid }">
+                            <option value="">Seleccione</option>
+                            <option value="gr">Gr</option>
+                            <option value="kg">Kg</option>
+                            <option value="oz">Oz</option>
+                          </select>
+                            <div *ngIf="forma.controls['unity'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('unity').valid }">
+                                Seleccione la unidad...
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Costo:</label>
+                                <input type="text" class="form-control" id="costs" formControlName="costs" [ngClass]="{ 'is-invalid': !forma.get('costs').valid }">
+                                <div *ngIf="forma.controls['costs'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('costs').valid }">
+                                    El costo es necesaria....
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Codigo:</label>
+                                <input type="text" class="form-control" id="code" formControlName="code" style="text-transform: uppercase">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Costo x Unidad ({{forma.get('unity').value}}):</label>
+                                <input type="text" disabled class="form-control" id="cost_unity" formControlName="cost_unity">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control" id="id" formControlName="id">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END EDIT MODAL MATERIAL-->

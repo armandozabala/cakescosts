@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
+import { FirebaseService } from '../../../services/firebase.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,7 +11,7 @@ export class NavbarComponent implements OnInit {
 
   isLogged: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: FirebaseService, private router: Router) { }
 
   ngOnInit() {
     this.getCurrentUser();
