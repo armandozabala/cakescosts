@@ -32,7 +32,7 @@ export class MateriaprimaComponent implements OnInit {
        'description' : new FormControl('', Validators.required),
        'quantity': new FormControl('',Validators.required),
        'costs':  new FormControl('',Validators.required),
-       'unity':  new FormControl('',Validators.required),
+       'unity':  new FormControl('null',Validators.required),
        'code':  new FormControl(''),
        'cost_unity':  new FormControl('')
     });
@@ -42,13 +42,13 @@ export class MateriaprimaComponent implements OnInit {
     this.forma.get('quantity')
     .valueChanges
     .subscribe(value => this.forma.get('cost_unity')
-      .setValue(isNaN(value) ? 0 : value =  this.forma.get('quantity').value / this.forma.get('costs').value )
+      .setValue(isNaN(value) ? 0 : value =  (this.forma.get('quantity').value / this.forma.get('costs').value).toFixed(4) )
     );
 
      this.forma.get('costs')
      .valueChanges
      .subscribe(value => this.forma.get('cost_unity')
-       .setValue(isNaN(value) ? 0 : value =  this.forma.get('quantity').value / this.forma.get('costs').value )
+       .setValue(isNaN(value) ? 0 : value =  (this.forma.get('quantity').value / this.forma.get('costs').value).toFixed(4) )
      );
 
 
@@ -66,6 +66,8 @@ export class MateriaprimaComponent implements OnInit {
 
   openModal() {
 
+    this.forma.reset();
+
     $('#addMaterialModal').modal('toggle');
 
   }
@@ -82,7 +84,6 @@ export class MateriaprimaComponent implements OnInit {
         this.materia.id = id;
 
 
-
         this.forma = new FormGroup({
           'description' : new FormControl(this.materia.description, Validators.required),
           'quantity': new FormControl(this.materia.quantity,Validators.required),
@@ -95,45 +96,64 @@ export class MateriaprimaComponent implements OnInit {
        this.forma.get('quantity')
        .valueChanges
        .subscribe(value => this.forma.get('cost_unity')
-         .setValue(isNaN(value) ? 0 : value =  this.forma.get('quantity').value / this.forma.get('costs').value )
+         .setValue(isNaN(value) ? 0 : value =  (this.forma.get('quantity').value / this.forma.get('costs').value).toFixed(4) )
        );
 
         this.forma.get('costs')
         .valueChanges
         .subscribe(value => this.forma.get('cost_unity')
-          .setValue(isNaN(value) ? 0 : value = this.forma.get('quantity').value / this.forma.get('costs').value )
+          .setValue(isNaN(value) ? 0 : value = (this.forma.get('quantity').value / this.forma.get('costs').value).toFixed(4) )
         );
+
+
+
 
     });
   }
 
-  editMaterial(){
+  editMaterial(forma:any){
 
-    this.forma.value.code = this.forma.value.code.toUpperCase();
+    console.log(forma);
+    forma.value.code = forma.value.code.toUpperCase();
     console.log(this.materia.id);
     const id = this.materia.id;
 
-    this.dataService.updateMaterial(id, this.forma.value).then(function(res){
+    this.dataService.updateMaterial(id, forma.value).then(function(res){
+
          $('#editMaterialModal').modal('toggle');
+
+         //setTimeout( () => {
+            this.forma.reset();
+         //},1000);
+
     }).catch(function(err){
          console.log(err);
     });
 
   }
 
-  addMaterial() {
+  addMaterial(forma) {
 
-    this.forma.value.code = this.forma.value.code.toUpperCase();
-    console.log('FormGroup', this.forma.value);
 
-    this.dataService.addMaterial(this.forma.value).then(function(res){
-        console.log(res.id);
-        $('#addMaterialModal').modal('hide');
+    forma.value.code = forma.value.code.toUpperCase();
+
+    this.dataService.addMaterial(forma.value).then(function(res){
+
+        $('#addMaterialModal').modal('toggle');
+
+          console.log(res.id);
+
+       setTimeout( () => {
+          forma.reset();
+       },1000);
+
+
     }).catch(function(err){
         console.log(err);
     });
 
   }
+
 
   confirmDelete(ids: string, materialText: string){
     console.log(ids);
