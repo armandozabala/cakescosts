@@ -1,110 +1,131 @@
 <a class="navbar-brand" style="font-size: 45px;" href="#">
     <img src="assets/img/baker.png" width="65" height="65" class="d-inline-block align-top" alt=""> Recetas
 </a>
-<button class="btn btn-primary btn-md" [routerLink]="['/recetaform']" style="margin-top:-15px;"> Crear </button>
+<button class="btn btn-primary btn-md" (click)="openReceta()" style="margin-top:-15px;"> Crear </button>
 <br>
 <br>
+
 <div class="card-columns" style="margin-bottom: 50px;">
-    <div class="card" style="background-color: rgb(255, 224, 245)">
-        <div class="text-center" style="margin-top: 10px">
-            <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
-        </div>
 
-        <div class="card-body">
-            <h4 class="card-title">Torta de Piña</h4>
-            <span>Tiempo de Horneado: 60 Minutos</span> <br>
-            <span>Tipo de Horno: Electrico</span><br>
-            <span>Costo: 10.000 $</span> <br>
-            <span>Utilidad: 5.000 $</span>
-            <div class="text-center" style="margin-top:15px;">
-                <a [routerLink]="['/receta','1']" class="btn btn-primary ">Ver Receta</a>
+    <div *ngFor="let receta of recetas">
+
+
+        <div class="card" style="background-color: rgb(255, 224, 245)">
+            <div class="text-center" style="margin-top: 10px">
+                <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
             </div>
 
-        </div>
-    </div>
-    <div class="card" style="background-color: rgb(255, 224, 245)">
-        <div class="text-center" style="margin-top: 10px">
-            <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
-        </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ receta.name }}</h4>
+                <span>Tiempo de Horneado: {{ receta.time}} Minutos</span> <br>
+                <span>Tipo de Horno: {{ receta.baker }}</span><br>
+                <span>Costo: 10.000 $</span> <br>
+                <span>Utilidad: 5.000 $</span>
+                <div class="text-center" style="margin-top:15px;">
+                    <a href="#" class="btn btn-primary ">Ver Receta</a>
+                </div>
 
-        <div class="card-body">
-            <h4 class="card-title">Torta de Chocolate</h4>
-            <span>Tiempo de Horneado: 60 Minutos</span> <br>
-            <span>Tipo de Horno: Electrico</span><br>
-            <span>Costo: 10.000 $</span> <br>
-            <span>Utilidad: 5.000 $</span>
-            <div class="text-center" style="margin-top:15px;">
-                <a href="#" class="btn btn-primary ">Ver Receta</a>
             </div>
-
         </div>
+
     </div>
-    <div class="card" style="background-color: rgb(255, 224, 245)">
-        <div class="text-center" style="margin-top: 10px">
-            <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
-        </div>
 
-        <div class="card-body">
-            <h4 class="card-title">Torta de Chocolate</h4>
-            <span>Tiempo de Horneado: 60 Minutos</span> <br>
-            <span>Tipo de Horno: Electrico</span><br>
-            <span>Costo: 10.000 $</span> <br>
-            <span>Utilidad: 5.000 $</span>
-            <div class="text-center" style="margin-top:15px;">
-                <a href="#" class="btn btn-primary ">Ver Receta</a>
+
+
+</div>
+
+
+<!-- MODAL ADD MATERIAL -->
+<div class="modal fade" id="addRecetaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Mi Receta</h5>
+
+
             </div>
+            <div class="modal-body">
 
-        </div>
-    </div>
-    <div class="card" style="background-color: rgb(255, 224, 245)">
-        <div class="text-center" style="margin-top: 10px">
-            <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
-        </div>
+                <form (ngSubmit)="addReceta(forma)" [formGroup]="forma" novalidate="novalidate">
 
-        <div class="card-body">
-            <h4 class="card-title">Torta de Chocolate</h4>
-            <span>Tiempo de Horneado: 60 Minutos</span> <br>
-            <span>Tipo de Horno: Electrico</span><br>
-            <span>Costo: 10.000 $</span> <br>
-            <span>Utilidad: 5.000 $</span>
-            <div class="text-center" style="margin-top:15px;">
-                <a href="#" class="btn btn-primary ">Ver Receta</a>
-            </div>
 
-        </div>
-    </div>
-    <div class="card" style="background-color: rgb(255, 224, 245)">
-        <div class="text-center" style="margin-top: 10px">
-            <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
-        </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Receta:</label>
+                        <input type="text" class="form-control" [ngClass]="{ 'is-invalid': !forma.get('name').valid }" id="name" formControlName="name">
+                        <div *ngIf="forma.controls['name'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('name').valid }">
+                            Nombre de la receta es necesaria....
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Tiempo de Horneado (Min):</label>
+                                <input type="number" class="form-control" [ngClass]="{ 'is-invalid': !forma.get('time').valid }" id="time" formControlName="time">
+                                <div *ngIf="forma.controls['time'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('time').valid }">
+                                    La cantidad es necesaria....
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="card-body">
-            <h4 class="card-title">Torta de Chocolate</h4>
-            <span>Tiempo de Horneado: 60 Minutos</span> <br>
-            <span>Tipo de Horno: Electrico</span><br>
-            <span>Costo: 10.000 $</span> <br>
-            <span>Utilidad: 5.000 $</span>
-            <div class="text-center" style="margin-top:15px;">
-                <a href="#" class="btn btn-primary ">Ver Receta</a>
-            </div>
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Tipo de Horno:</label>
 
-        </div>
-    </div>
-    <div class="card" style="background-color: rgb(255, 224, 245)">
-        <div class="text-center" style="margin-top: 10px">
-            <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
-        </div>
+                            <select name="baker" id="baker" class="form-control" formControlName="baker" [ngClass]="{ 'is-invalid': !forma.get('baker').valid }">
+                          <option value="null">Seleccione</option>
+                          <option value="Horno de Gas">Horno de Gas</option>
+                          <option value="Horno Electrico">Horno Electrico</option>
 
-        <div class="card-body">
-            <h4 class="card-title">Torta de Chocolate</h4>
-            <span>Tiempo de Horneado: 60 Minutos</span> <br>
-            <span>Tipo de Horno: Electrico</span><br>
-            <span>Costo: 10.000 $</span> <br>
-            <span>Utilidad: 5.000 $</span>
-            <div class="text-center" style="margin-top:15px;">
-                <a href="#" class="btn btn-primary ">Ver Receta</a>
+                        </select>
+                            <div *ngIf="forma.controls['baker'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('baker').valid }">
+                                Seleccione el tipo de horno para preparar su receta....
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label for="recipient-name" class="col-form-label">Tamaño:</label>
+
+                            <select name="size" id="size" class="form-control" formControlName="size" [ngClass]="{ 'is-invalid': !forma.get('size').valid }">
+                          <option value="null">Seleccione</option>
+                          <option value="Pequeña">Pequeña</option>
+                          <option value="Mediana">Mediana</option>
+                          <option value="Grande">Grande</option>
+
+                        </select>
+                            <div *ngIf="forma.controls['size'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('size').valid }">
+                                Seleccione el tamaño de su receta...
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Porciones:</label>
+                                <input type="number" class="form-control" id="porcion" formControlName="porcion" [ngClass]="{ 'is-invalid': !forma.get('porcion').valid }">
+                                <div *ngIf="forma.controls['porcion'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('porcion').valid }">
+                                    Debe indicar la porcion de su receta.....
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
+
             </div>
 
         </div>
     </div>
 </div>
+<!-- END ADD MODAL MATERIAL-->

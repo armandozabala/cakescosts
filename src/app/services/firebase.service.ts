@@ -45,6 +45,14 @@ export class FirebaseService {
       return this.af.collection<Materia>('materia').add(materia);
   }
 
+  addReceta(materia: Materia) {
+    return this.af.collection<Materia>('recetas').add(materia);
+  }
+
+  getRecetas() {
+    return this.af.collection<Materia>('recetas').snapshotChanges();
+  }
+
   deleteMaterial(id: string) {
       return this.af.doc('materia/' + id).delete();
   }
