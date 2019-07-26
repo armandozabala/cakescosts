@@ -1,50 +1,109 @@
-<a class="navbar-brand" style="font-size: 45px;" href="#">
-    <img src="assets/img/baker.png" width="65" height="65" class="d-inline-block align-top" alt=""> Torta de Piña
-</a>
-<br>
-<br>
-<table class="table table-hover">
-    <thead>
-        <tr style="text-align: center">
-            <th scope="col">Codigo</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Costo</th>
-            <th scope="col">Costo x Unidad</th>
-            <th scope="col">Opciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr style="text-align: center">
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>@mdo</td>
-            <td> <button class="btn btn-primary btn-sm"> Modificar </button>
-                <button class="btn btn-danger btn-sm" style="margin-left: 10px;"> Eliminar </button></td>
-        </tr>
-        <tr style="text-align: center">
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            <td>@mdo</td>
-            <td> <button class="btn btn-primary btn-sm"> Modificar </button>
-                <button class="btn btn-danger btn-sm" style="margin-left: 10px;"> Eliminar </button></td>
-        </tr>
-        <tr style="text-align: center">
-            <th scope="row">3</th>
-            <td>Larry the Bird</td>
-            <td>Larry the Bird</td>
-            <td>@twitter</td>
-            <td>@mdo</td>
-            <td> <button class="btn btn-primary btn-sm"> Modificar </button>
-                <button class="btn btn-danger btn-sm" style="margin-left: 10px;"> Eliminar </button></td>
-        </tr>
+<app-navbar></app-navbar>
+
+<div class="container">
+
+    <a class="navbar-brand" style="font-size: 45px;" href="#">
+        <img src="assets/img/baker.png" width="65" height="65" class="d-inline-block align-top" alt=""> {{receta.name}}
+    </a>
+
+    <button class="btn btn-primary btn-md" (click)="openIngredienteModal()" style="margin-top:-15px;"> Agregar Ingredientes </button>
+    <br>
+    <table class="table table-hover">
+        <thead>
+            <tr style="text-align: center">
+                <th scope="col">Codigo</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">$Gr/Receta</th>
+                <th scope="col">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr style="text-align: center" *ngFor="let ing of ingrediente">
+                <th scope="row">{{ ing }}</th>
+                <td>{{ ing.description }}</td>
+                <td>{{ ing.cost }}</td>
+                <td>{{ ing.quantity }}</td>
+                <td> <button class="btn btn-primary btn-sm" (click)="editModal(ing.id)"> Modificar </button>
+                    <button class="btn btn-danger btn-sm" (click)="confirmDelete(ing.id, materia.description)" style="margin-left: 10px;"> Eliminar </button></td>
+            </tr>
+
+        
 
 
-    </tbody>
+
+        </tbody>
 
 
-</table>
+    </table>
+
+</div>
+
+
+<!-- MODAL ADD MATERIAL -->
+<div class="modal fade" id="addIngredienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Ingrediente</h5>
+
+
+            </div>
+            <div class="modal-body">
+
+                <form (ngSubmit)="addIngrediente(forma)"  [formGroup]="forma" novalidate="novalidate">
+
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Descripción:</label>
+                        <!-- <input type="text"  [ngClass]="{ 'is-invalid': !forma.get('description').valid }" id="description" >-->
+                        <l-select2 formControlName="description" [data]="ingredientes" [disabled]="false" (valueChange)="valueChange($event)"></l-select2>
+
+                        <div *ngIf="forma.controls['description'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('description').valid }">
+                            La descripción del producto es necesaria....
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Cantidad:</label>
+
+                                <input type="text" class="form-control" [ngClass]="{ 'is-invalid': !forma.get('quantity').valid }" id="quantity" formControlName="quantity" (keyup.enter)="update($event)" value="0">
+                                <div *ngIf="forma.controls['quantity'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('quantity').valid }">
+                                    La cantidad es necesaria....
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">$Gr/Receta:</label>
+                                <input type="text" class="form-control" id="costs" formControlName="costs" [ngClass]="{ 'is-invalid': !forma.get('costs').valid }">
+                                <div *ngIf="forma.controls['costs'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('costs').valid }">
+                                    El costo es necesaria....
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END ADD MODAL MATERIAL-->

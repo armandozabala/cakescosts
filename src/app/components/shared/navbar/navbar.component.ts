@@ -25,13 +25,13 @@ export class NavbarComponent implements OnInit {
   getCurrentUser(){
       this.authService.isAuth().subscribe( auth => {
 
-        if(auth){
+       /* if(auth){
           console.log("SI");
           this.isLogged = true;
         }else{
           console.log("NO");
           this.isLogged = false;
-        }
+        }*/
       });
   }
 

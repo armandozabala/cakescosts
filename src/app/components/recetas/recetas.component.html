@@ -1,39 +1,44 @@
-<a class="navbar-brand" style="font-size: 45px;" href="#">
-    <img src="assets/img/baker.png" width="65" height="65" class="d-inline-block align-top" alt=""> Recetas
-</a>
-<button class="btn btn-primary btn-md" (click)="openReceta()" style="margin-top:-15px;"> Crear </button>
-<br>
-<br>
+<app-navbar></app-navbar>
 
-<div class="card-columns" style="margin-bottom: 50px;">
+<div class="container mt-2">
+    <a class="navbar-brand" style="font-size: 45px;" href="#">
+        <img src="assets/img/baker.png" width="65" height="65" class="d-inline-block align-top" alt=""> Recetas
+    </a>
+    <button class="btn btn-primary btn-md" (click)="openReceta()" style="margin-top:-15px;"> Crear </button>
+    <br>
+    <br>
 
-    <div *ngFor="let receta of recetas">
+    <div class="card-columns" style="margin-bottom: 50px;">
+
+        <div *ngFor="let receta of recetas">
 
 
-        <div class="card" style="background-color: rgb(255, 224, 245)">
-            <div class="text-center" style="margin-top: 10px">
-                <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
-            </div>
-
-            <div class="card-body">
-                <h4 class="card-title">{{ receta.name }}</h4>
-                <span>Tiempo de Horneado: {{ receta.time}} Minutos</span> <br>
-                <span>Tipo de Horno: {{ receta.baker }}</span><br>
-                <span>Costo: 10.000 $</span> <br>
-                <span>Utilidad: 5.000 $</span>
-                <div class="text-center" style="margin-top:15px;">
-                    <a href="#" class="btn btn-primary ">Ver Receta</a>
+            <div class="card" style="background-color: rgb(255, 224, 245)">
+                <div class="text-center" style="margin-top: 10px">
+                    <img src="../../../assets/img/cream.png" width="80" height="80" alt="...">
                 </div>
 
+                <div class="card-body">
+                    <h4 class="card-title">{{ receta.name }}</h4>
+                    <span>Tiempo de Horneado: {{ receta.time}} Minutos</span> <br>
+                    <span>Tipo de Horno: {{ receta.baker }}</span><br>
+                    <span>Costo: 10.000 $</span> <br>
+                    <span>Utilidad: 5.000 $</span>
+                    <div class="text-center" style="margin-top:15px;">
+                        <a (click)="verReceta(receta.id)" class="btn btn-primary mr-1">Ver Receta</a>
+                        <button (click)="confirmDelete(receta.id)" class="btn btn-danger ml-1">Borrar</button>
+                    </div>
+
+                </div>
             </div>
+
         </div>
+
+
 
     </div>
 
-
-
 </div>
-
 
 <!-- MODAL ADD MATERIAL -->
 <div class="modal fade" id="addRecetaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -122,6 +127,31 @@
                         <button type="submit" class="btn btn-primary">Agregar</button>
                     </div>
                 </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END ADD MODAL MATERIAL-->
+
+<!-- MODAL ADD MATERIAL -->
+<div class="modal fade" id="deleteRecetaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar</h5>
+
+            </div>
+            <div class="modal-body">
+
+                <p>Desea borrar la receta seleccionada?</p>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" (click)="borrar(id)" class="btn btn-primary">Si</button>
+                </div>
+
 
             </div>
 
