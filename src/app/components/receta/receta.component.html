@@ -11,7 +11,7 @@
     <table class="table table-hover">
         <thead>
             <tr style="text-align: center">
-                <th scope="col">Codigo</th>
+
                 <th scope="col">Nombre</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">$Gr/Receta</th>
@@ -20,16 +20,16 @@
         </thead>
         <tbody>
 
-            <tr style="text-align: center" *ngFor="let ing of ingrediente">
-                <th scope="row">{{ ing }}</th>
+            <tr style="text-align: center" *ngFor="let ing of ingredientes">
+
                 <td>{{ ing.description }}</td>
-                <td>{{ ing.cost }}</td>
+                <td>{{ ing.costs}}</td>
                 <td>{{ ing.quantity }}</td>
                 <td> <button class="btn btn-primary btn-sm" (click)="editModal(ing.id)"> Modificar </button>
-                    <button class="btn btn-danger btn-sm" (click)="confirmDelete(ing.id, materia.description)" style="margin-left: 10px;"> Eliminar </button></td>
+                    <button class="btn btn-danger btn-sm" (click)="confirmDelete(ing.id)" style="margin-left: 10px;"> Eliminar </button></td>
             </tr>
 
-        
+
 
 
 
@@ -52,18 +52,18 @@
             </div>
             <div class="modal-body">
 
-                <form (ngSubmit)="addIngrediente(forma)"  [formGroup]="forma" novalidate="novalidate">
+                <form (ngSubmit)="addIngrediente(forma)" [formGroup]="forma" novalidate="novalidate">
 
 
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Descripción:</label>
                         <!-- <input type="text"  [ngClass]="{ 'is-invalid': !forma.get('description').valid }" id="description" >-->
-                        <l-select2 formControlName="description" [data]="ingredientes" [disabled]="false" (valueChange)="valueChange($event)"></l-select2>
-
+                        <ng-select class="custom" (change)="onChange($event)" bindLabel="description" bindValue="description" [items]="material" formControlName="description"></ng-select>
                         <div *ngIf="forma.controls['description'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('description').valid }">
                             La descripción del producto es necesaria....
                         </div>
                     </div>
+                    {{selectedId}}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">

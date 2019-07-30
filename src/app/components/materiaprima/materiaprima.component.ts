@@ -56,11 +56,7 @@ export class MateriaprimaComponent implements OnInit {
 
   ngOnInit(){
      this.dataService.getMaterial().subscribe( res => {
-        this.materias = res.map( item => {
-            const id = item.payload.doc.id;
-            const data = item.payload.doc.data();
-            return{ id, ...data};
-        })
+        this.materias = res;
      })
   }
 

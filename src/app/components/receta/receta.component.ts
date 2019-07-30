@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Select2OptionData } from 'ng2-select2';
-
+import { map } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
@@ -19,15 +18,18 @@ export class RecetaComponent implements OnInit {
 
   exampleData: any[]=[];
 
-  ingredientes:any ={};
+  ingredientes:any[] =[];
+  material:any[] =[];
 
-  ingrediente: any;
+  ingredientesReceta: any[]=[];
 
   forma: FormGroup;
 
   formaEdit: FormGroup;
 
   idReceta:any;
+
+  selectedId = '';
 
   constructor(public activatedRoute: ActivatedRoute, private dataService: FirebaseService) {
 
@@ -61,41 +63,25 @@ export class RecetaComponent implements OnInit {
 
    }
 
+   onChange(event) {
+   console.log(event);
+
+   console.log(event);
+
+   this.cost = event.cost_unity;
+
+   console.log(this.cost);
+
+   this.forma.get('costs').setValue('');
+   this.forma.get('quantity').setValue('');
+}
+
   ngOnInit() {
 
+    this.getMaterial()
 
-
-     this.dataService.getMaterial().subscribe( ing => {
-
-         this.ingredientes = ing.map( item => {
-          const id = item.payload.doc.id;
-          const data = item.payload.doc.data();
-          return{ id, ...data};
-      });
-
-      //console.log(this.ingredientes);
-
-      this.ingredientes.forEach(element => {
-          console.log(element);
-          element.text = element.description;
-
-          this.exampleData.push(element);
-      });
-
-
-     });
   }
 
-  valueChange(event){
-    console.log(event);
-
-    this.cost = event.cost_unity;
-
-    console.log(this.cost);
-
-    this.forma.get('costs').setValue('');
-    this.forma.get('quantity').setValue('');
-  }
 
 
   update(event){
@@ -103,15 +89,24 @@ export class RecetaComponent implements OnInit {
   }
 
   openIngredienteModal(){
+    this.forma.reset();
     $('#addIngredienteModal').modal('toggle');
   }
 
+  getMaterial(){
+      this.dataService.getMaterial().subscribe( res => {
+
+        this.material = res;
+
+      });
+  }
 
   getIngredientes(idReceta){
 
-    this.dataService.getIngredientesReceta(this.idReceta).subscribe( res => {
+    this.dataService.getIngredientesReceta(idReceta).subscribe( res => {
 
-        this.ingrediente = res;
+      console.log(res);
+      this.ingredientes = res;
 
     });
   }
@@ -123,7 +118,7 @@ export class RecetaComponent implements OnInit {
 
     this.dataService.addIngrediente(this.idReceta, forma.value).then(function(res){
 
-      $('#addMaterialModal').modal('toggle');
+      $('#addIngredienteModal').modal('toggle');
 
         console.log(res.id);
 

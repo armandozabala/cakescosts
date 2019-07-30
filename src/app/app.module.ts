@@ -18,8 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 
-import { LSelect2Module } from 'ngx-select2';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -41,7 +40,7 @@ import { LSelect2Module } from 'ngx-select2';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    LSelect2Module
+    NgSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

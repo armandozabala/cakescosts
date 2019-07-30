@@ -11,6 +11,8 @@ import { Materia } from '../model/interfaces';
 export class FirebaseService {
 
 
+  private ingredientes: Observable<any[]>;
+
   constructor(private afs: AngularFireAuth, private af: AngularFirestore) { }
 
   loginEmailUser(email: string, pass: string) {
@@ -42,12 +44,29 @@ export class FirebaseService {
   }
 
   getIngredientesReceta( id: string ) {
-    return this.af.collection<Materia>('recetas/' + id + '/ingredientes' ).snapshotChanges();
+    return this.ingredientes =  this.af.collection<Materia>('recetas/' + id + '/ingredientes' ).snapshotChanges()
+    .pipe(map(changes => {
+       return changes.map(action=>{
+            const data = action.payload.doc.data();
+            data.id = action.payload.doc.id;
+            return data;
+       });
+    }));
   }
 
   getMaterial() {
-      return this.af.collection<Materia>('materia').snapshotChanges();
+      return this.af.collection<Materia>('materia').snapshotChanges().pipe(map(changes => {
+        return changes.map(action=>{
+             const data = action.payload.doc.data();
+             data.id = action.payload.doc.id;
+             return data;
+        });
+     }));
   }
+
+  getMaterialReceta() {
+   this.af.collection<Materia>('materia').valueChanges();
+}
 
   addMaterial(materia: Materia) {
       return this.af.collection<Materia>('materia').add(materia);
