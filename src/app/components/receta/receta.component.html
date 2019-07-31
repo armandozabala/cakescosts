@@ -25,8 +25,8 @@
                 <td>{{ ing.description }}</td>
                 <td>{{ ing.costs}}</td>
                 <td>{{ ing.quantity }}</td>
-                <td> <button class="btn btn-primary btn-sm" (click)="editModal(ing.id)"> Modificar </button>
-                    <button class="btn btn-danger btn-sm" (click)="confirmDelete(ing.id)" style="margin-left: 10px;"> Eliminar </button></td>
+                <td> <button class="btn btn-primary btn-sm" (click)="openEditIngrediente(ing.id)"> Modificar </button>
+                    <button class="btn btn-danger btn-sm" (click)="confirmDelete(ing.id, ing.description)" style="margin-left: 10px;"> Eliminar </button></td>
             </tr>
 
 
@@ -77,7 +77,7 @@
 
                             </div>
                         </div>
-
+                        <input type="hidden" class="form-control" id="costs_unity" formControlName="costs_unity">
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -107,3 +107,97 @@
     </div>
 </div>
 <!-- END ADD MODAL MATERIAL-->
+
+
+<!-- MODAL EDIT MATERIAL -->
+<div class="modal fade" id="editIngredienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Ingrediente</h5>
+
+
+            </div>
+            <div class="modal-body">
+
+                <form (ngSubmit)="editIngrediente(formaEdit)" [formGroup]="formaEdit" novalidate="novalidate">
+
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Descripción:</label>
+                        <!-- <input type="text"  [ngClass]="{ 'is-invalid': !forma.get('description').valid }" id="description" >-->
+                        <ng-select class="custom" (change)="onChange($event)" bindLabel="description" bindValue="description" [items]="material" formControlName="descriptionEdit"></ng-select>
+                        <div *ngIf="forma.controls['description'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !forma.get('description').valid }">
+                            La descripción del producto es necesaria....
+                        </div>
+                    </div>
+                    {{selectedId}}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Cantidad:</label>
+
+                                <input type="text" class="form-control" [ngClass]="{ 'is-invalid': !formaEdit.get('quantityEdit').valid }" id="quantityEdit" formControlName="quantityEdit" (keyup.enter)="update($event)" value="0">
+                                <div *ngIf="formaEdit.controls['quantityEdit'].errors?.required" class="form-control-feedback" [ngClass]="{ 'invalid-feedback': !formaEdit.get('quantityEdit').valid }">
+                                    La cantidad es necesaria....
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" formControlName="idReceta">
+
+                        <div class=" col-md-6 ">
+                            <div class="form-group ">
+                                <label for="recipient-name " class="col-form-label ">$Gr/Receta:</label>
+                                <input type="text " class="form-control " id="costsEdit" formControlName="costsEdit" [ngClass]="{ 'is-invalid': !forma.get( 'costs').valid } ">
+                                <div *ngIf="forma.controls[ 'costs'].errors?.required " class="form-control-feedback " [ngClass]="{ 'invalid-feedback': !forma.get( 'costs').valid } ">
+                                    El costo es necesaria....
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary ">Agregar</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END ADD MODAL MATERIAL-->
+
+<!-- MODAL CONFIRM  MATERIAL -->
+<div class="modal fade" id="confirmMaterialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Borrar Materia Prima</h5>
+
+
+            </div>
+            <div class="modal-body">
+
+                <p>Desea borrar este ingrediente: <b>  {{ materialText }} </b>?</p>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" (click)="deleteMaterialReceta(idIngrediente)" class="btn btn-primary">Confirmar</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END CONFIRM MODAL MATERIAL-->

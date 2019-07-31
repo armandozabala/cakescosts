@@ -35,6 +35,11 @@ export class FirebaseService {
     return this.af.doc('materia/' + id ).update(data);
   }
 
+  updateMaterialReceta(idReceta: string, idMaterial: string, data: any) {
+    return this.af.doc('recetas/' + idReceta + '/ingredientes/' + idMaterial).update(data);
+  }
+
+
   getMaterialId( id: string) {
       return this.af.doc('materia/' + id ).valueChanges();
   }
@@ -42,6 +47,10 @@ export class FirebaseService {
   getRecetaId( id: string ) {
       return this.af.doc('recetas/' + id ).valueChanges();
   }
+
+  getIngredienteReceta(id: string, ing: string ) {
+    return this.af.doc('recetas/' + id + '/ingredientes/' + ing).valueChanges();
+}
 
   getIngredientesReceta( id: string ) {
     return this.ingredientes =  this.af.collection<Materia>('recetas/' + id + '/ingredientes' ).snapshotChanges()
@@ -87,6 +96,11 @@ export class FirebaseService {
   deleteMaterial(id: string) {
       return this.af.doc('materia/' + id).delete();
   }
+
+  deleteMaterialReceta(idReceta: string, id: string) {
+    return this.af.doc('recetas/' + idReceta + '/ingredientes/' + id).delete();
+}
+
 
   deleteReceta(id: string){
     return this.af.doc('recetas/' + id).delete();
